@@ -2,7 +2,7 @@ import numpy as np
 
 
 def softmax(predictions):
-    '''
+    """
     Computes probabilities from scores
 
     Arguments:
@@ -12,14 +12,14 @@ def softmax(predictions):
     Returns:
       probs, np array of the same shape as predictions - 
         probability for every class, 0..1
-    '''
+    """
     # TODO implement softmax
     # Your final implementation shouldn't have any loops
     raise Exception("Not implemented!")
 
 
 def cross_entropy_loss(probs, target_index):
-    '''
+    """
     Computes cross-entropy loss
 
     Arguments:
@@ -30,14 +30,14 @@ def cross_entropy_loss(probs, target_index):
 
     Returns:
       loss: single value
-    '''
+    """
     # TODO implement cross-entropy
     # Your final implementation shouldn't have any loops
     raise Exception("Not implemented!")
 
 
 def softmax_with_cross_entropy(predictions, target_index):
-    '''
+    """
     Computes softmax and cross-entropy loss for model predictions,
     including the gradient
 
@@ -50,7 +50,7 @@ def softmax_with_cross_entropy(predictions, target_index):
     Returns:
       loss, single value - cross-entropy loss
       dprediction, np array same shape as predictions - gradient of predictions by loss value
-    '''
+    """
     # TODO implement softmax with cross-entropy
     # Your final implementation shouldn't have any loops
     raise Exception("Not implemented!")
@@ -59,7 +59,7 @@ def softmax_with_cross_entropy(predictions, target_index):
 
 
 def l2_regularization(W, reg_strength):
-    '''
+    """
     Computes L2 regularization loss on weights and its gradient
 
     Arguments:
@@ -69,7 +69,7 @@ def l2_regularization(W, reg_strength):
     Returns:
       loss, single value - l2 regularization loss
       gradient, np.array same shape as W - gradient of weight by l2 loss
-    '''
+    """
 
     # TODO: implement l2 regularization and gradient
     # Your final implementation shouldn't have any loops
@@ -79,7 +79,7 @@ def l2_regularization(W, reg_strength):
     
 
 def linear_softmax(X, W, target_index):
-    '''
+    """
     Performs linear classification and returns loss and gradient over W
 
     Arguments:
@@ -91,7 +91,7 @@ def linear_softmax(X, W, target_index):
       loss, single value - cross-entropy loss
       gradient, np.array same shape as W - gradient of weight by loss
 
-    '''
+    """
     predictions = np.dot(X, W)
 
     # TODO implement prediction and gradient over W
@@ -107,7 +107,7 @@ class LinearSoftmaxClassifier():
 
     def fit(self, X, y, batch_size=100, learning_rate=1e-7, reg=1e-5,
             epochs=1):
-        '''
+        """
         Trains linear classifier
         
         Arguments:
@@ -117,7 +117,7 @@ class LinearSoftmaxClassifier():
           learning_rate, float - learning rate for gradient descent
           reg, float - L2 regularization strength
           epochs, int - number of epochs
-        '''
+        """
 
         num_train = X.shape[0]
         num_features = X.shape[1]
@@ -145,7 +145,7 @@ class LinearSoftmaxClassifier():
         return loss_history
 
     def predict(self, X):
-        '''
+        """
         Produces classifier predictions on the set
        
         Arguments:
@@ -153,7 +153,7 @@ class LinearSoftmaxClassifier():
 
         Returns:
           y_pred, np.array of int (test_samples)
-        '''
+        """
         y_pred = np.zeros(X.shape[0], dtype=np.int)
 
         # TODO Implement class prediction
