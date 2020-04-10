@@ -1,9 +1,8 @@
 import numpy as np
 
-
 class KNN:
     """
-    K-neariest-neighbor classifier using L1 loss
+    K-nearest-neighbor classifier using L1 loss
     """
     def __init__(self, k=1):
         self.k = k
@@ -14,7 +13,7 @@ class KNN:
 
     def predict(self, X, num_loops=0):
         """
-        Uses the KNN model to predict clases for the data samples provided
+        Uses the KNN model to predict classes for the data samples provided
         
         Arguments:
         X, np array (num_samples, num_features) - samples to run
@@ -32,10 +31,7 @@ class KNN:
         else:
             dists = self.compute_distances_two_loops(X)
 
-        if self.train_y.dtype == np.bool:
-            return self.predict_labels_binary(dists)
-        else:
-            return self.predict_labels_multiclass(dists)
+        return self.predict_labels(dists)
 
     def compute_distances_two_loops(self, X):
         """
@@ -54,8 +50,9 @@ class KNN:
         dists = np.zeros((num_test, num_train), np.float32)
         for i_test in range(num_test):
             for i_train in range(num_train):
-                # TODO: Fill dists[i_test][i_train]
-                pass
+                dists[i_test][i_train] = np.sum(np.abs(self.train_X[i_train] - X[i_test]))
+
+        return dists
 
     def compute_distances_one_loop(self, X):
         """
@@ -73,9 +70,9 @@ class KNN:
         num_test = X.shape[0]
         dists = np.zeros((num_test, num_train), np.float32)
         for i_test in range(num_test):
-            # TODO: Fill the whole row of dists[i_test]
-            # without additional loops or list comprehensions
-            pass
+            dists[i_test] = np.sum(np.abs(self.train_X - X[i_test]), axis=1)
+
+        return dists
 
     def compute_distances_no_loops(self, X):
         """
@@ -93,46 +90,27 @@ class KNN:
         num_test = X.shape[0]
         # Using float32 to to save memory - the default is float64
         dists = np.zeros((num_test, num_train), np.float32)
-        # TODO: Implement computing all distances with no loops!
-        pass
+        X_reshaped = X[:, np.newaxis]
+        dists = np.sum(np.abs(self.train_X - X_reshaped), axis=2)
+        return dists
 
-    def predict_labels_binary(self, dists):
+    def predict_labels(self, dists):
         """
-        Returns model predictions for binary classification case
-        
+        Returns model predictions for classification
+
         Arguments:
         dists, np array (num_test_samples, num_train_samples) - array
            with distances between each test and each train sample
 
         Returns:
-        pred, np array of bool (num_test_samples) - binary predictions 
-           for every test sample
+        predictions, np array of labels (num_test_samples)
         """
         num_test = dists.shape[0]
-        pred = np.zeros(num_test, np.bool)
+        predictions = np.zeros(num_test, dtype=self.train_y.dtype)
         for i in range(num_test):
-            # TODO: Implement choosing best class based on k
-            # nearest training samples
-            pass
-        return pred
+            indexed = list(enumerate(dists[i]))
+            nearest = sorted(indexed, key=lambda x: x[1])[:self.k]
+            prediction = [self.train_y[index] for index, _distance in nearest]
+            predictions[i] = round(sum(prediction) / self.k)
 
-    def predict_labels_multiclass(self, dists):
-        """
-        Returns model predictions for multi-class classification case
-        
-        Arguments:
-        dists, np array (num_test_samples, num_train_samples) - array
-           with distances between each test and each train sample
-
-        Returns:
-        pred, np array of int (num_test_samples) - predicted class index 
-           for every test sample
-        """
-        num_test = dists.shape[0]
-        num_test = dists.shape[0]
-        pred = np.zeros(num_test, np.int)
-        for i in range(num_test):
-            # TODO: Implement choosing best class based on k
-            # nearest training samples
-            pass
-        return pred
+        return predictions
